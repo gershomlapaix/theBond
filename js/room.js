@@ -50,7 +50,6 @@ let expandVideoFrame = (e) => {
     if (videoFrames[i].id != userIdInDisplayFrame) {
       videoFrames[i].style.height = "100px";
       videoFrames[i].style.width = "100px";
-      console.log(videoFrames[i].id);
     }
   }
 };
