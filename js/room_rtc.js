@@ -58,7 +58,6 @@ let handleUserPublished = async (user, mediaType) => {
   await client.subscribe(user, mediaType);
 
   let player = document.getElementById(`user-container-${user.uid}`);
-
   if (player === null) {
     player = `
     <div class="video__container" id="user-container-${user.uid}">
@@ -75,6 +74,11 @@ let handleUserPublished = async (user, mediaType) => {
       .addEventListener("click", expandVideoFrame);
   }
 
+  if (displayFrame.style.display) {
+    player.style.height = "100px";
+    player.style.width = "100px";
+  }
+
   if (mediaType === "video") {
     user.videoTrack.play(`user-${user.uid}`);
   }
@@ -87,6 +91,17 @@ let handleUserPublished = async (user, mediaType) => {
 let handleUserLeft = async (user) => {
   delete remoteUsers[user.uid];
   document.getElementById(`user-container-${user.uid}`).remove();
+
+  if (userIdInDisplayFrame === `user-container-${user.uid}`) {
+    displayFrame.style.display = null;
+
+    let videoFrames = document.getElementsByClassName('video__container')
+
+    for(let i = 0; videoFrames.length > i; i++){
+      videoFrames[i].style.height = '300px'
+      videoFrames[i].style.width="300px"
+    }
+  }
 };
 
 joinRoomInit();

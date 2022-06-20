@@ -177,7 +177,17 @@
   display: none;
 }
 
-#streams__container{
+#stream__box .video__container {
+  border: 2px solid #000;
+  border-radius: 0;
+  height: 100% !important;
+  width: 100% !important;
+}
+#stream__box video {
+  border-radius: 0;
+}
+
+#streams__container {
   display: flex;
   flex-wrap: wrap;
   gap: 2em;
@@ -199,24 +209,24 @@
   width: 300px;
 }
 
-.video-player{
+.video-player {
   height: 100%;
   width: 100%;
 }
 
-.video-player video{
+.video-player video {
   border-radius: 50%;
 }
 
 @media (max-width: 1400px) {
-  .video__container{
+  .video__container {
     height: 200px;
     width: 200px;
   }
 }
 
 @media (max-width: 760px) {
-  .video__container{
+  .video__container {
     height: 100px;
     width: 100px;
   }
