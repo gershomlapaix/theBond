@@ -59,6 +59,19 @@ let handleChannelMessage = async (messageData, MemberId) => {
   if (data.type === "chat") {
     addMessageToDOm(data.displayName, data.message);
   }
+
+  if (data.type == "user_left") {
+    document.getElementById(`user-container-${data.uid}`).remove();
+
+    if (userIdInDisplayFrame === `user-container-${uid}`) {
+      displayFrame.style.display = null;
+
+      for (let i = 0; videoFrames.length > i; i++) {
+        videoFrames[i].style.height = "300px";
+        videoFrames[i].style.width = "300px";
+      }
+    }
+  }
 };
 
 // sending messages

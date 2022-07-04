@@ -52,11 +52,12 @@ let joinRoomInit = async () => {
 
   client.on("user-published", handleUserPublished);
   client.on("user-left", handleUserLeft);
-
-  joinStream();
 };
 
 let joinStream = async () => {
+  document.getElementById("join-btn").style.display = "none";
+  document.getElementsByClassName("stream__actions")[0].style.display = "flex";
+
   localTracks = await AgoraRTC.createMicrophoneAndCameraTracks(
     {},
     {
@@ -144,6 +145,11 @@ let handleUserPublished = async (user, mediaType) => {
 
 let handleUserLeft = async (user) => {
   delete remoteUsers[user.uid];
+  let item = document.getElementById(`user-container-${user.uid}`);
+
+  if(item){
+    item.remove();
+  }
   document.getElementById(`user-container-${user.uid}`).remove();
 
   if (userIdInDisplayFrame === `user-container-${user.uid}`) {
@@ -230,8 +236,48 @@ let toggleMic = async (e) => {
   }
 };
 
+let leaveStream = async (e) => {
+  document.getElementById("join-btn").style.display = "block";
+  document.getElementsByClassName("stream__actions")[0].style.display = "none";
+
+  for (let i = 0; localTracks.length > i; i++) {
+    localTracks[i].stop();
+    localTracks[i].close();
+  }
+
+  //  localTracks[0 : for audio
+  //  localTracks[1] : for video
+
+  await client.unpublish([localTracks[0], localTracks[1]]);
+
+  if (localScreenTracks) {
+    await client.unpublish([localScreenTracks]);
+  }
+
+  document.getElementById(`user-container-${uid}`).remove();
+
+  if (userIdInDisplayFrame === `user-container-${uid}`) {
+    displayFrame.style.display = null;
+
+    for (let i = 0; videoFrames.length > i; i++) {
+      videoFrames[i].style.height = "300px";
+      videoFrames[i].style.width = "300px";
+    }
+  }
+
+  channel.sendMessage({
+    text: JSON.stringify({ type: "user_left", uid: uid }),
+  });
+};
+
 document.getElementById("camera-btn").addEventListener("click", toggleCamera);
 document.getElementById("mic-btn").addEventListener("click", toggleMic);
 document.getElementById("screen-btn").addEventListener("click", toggleScreen);
+
+// join stream
+document.getElementById("join-btn").addEventListener("click", joinStream);
+
+// leave stream
+document.getElementById("leave-btn").addEventListener("click", leaveStream);
 
 joinRoomInit();
