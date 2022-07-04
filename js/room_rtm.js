@@ -14,11 +14,7 @@ let addMemberToDom = async (MemberId) => {
   membersWrapepr.insertAdjacentHTML("beforeend", memberItem);
 };
 
-let updateMemberTotal = async()=>{
-    let members = await channel.getMembers();
-    let memberTotal = members.length;
-    document.getElementById("member__total").innerHTML = memberTotal;
-}
+let updateMemberTotal = async()=>{}
 
 let handleMemberLeft = async (MemberId) => {
   removeMemberFromDom(MemberId);
